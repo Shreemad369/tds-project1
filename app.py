@@ -27,12 +27,15 @@ def execute_task():
 
     try:
         # Use OpenAI GPT-4o-Mini to parse and execute the task
-        response = openai.ChatCompletion.acreate(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": task}],
-            max_tokens=200,
-        )
+        response = openai.ChatCompletion.create(
+             model="gpt-4o-mini",
+             messages=[
+                  {"role": "user", "content": task}
+                  ],
+                  max_tokens=200,
+                  )
         llm_output = response["choices"][0]["message"]["content"]
+
 
 
         # Here you can add logic to process the LLM's output and execute tasks.
@@ -59,3 +62,4 @@ def read_file():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
+
