@@ -14,13 +14,17 @@ openai.api_base = "https://api.aiproxy.io/v1"
 
 def sanitize_path(user_path):
     """Ensure paths stay within allowed directories or specific exceptions."""
+    # Allow specific files like LICENSE
+    if user_path == "LICENSE":
+        return Path(DATA_DIR) / user_path  # Resolve LICENSE in /data
+
+    # Ensure path stays within /data directory
     safe_path = Path(DATA_DIR) / user_path
-    print(f"Sanitizing path: {safe_path}")  # Debugging line
-    
-    if not str(safe_path).startswith(DATA_DIR):
+    resolved_safe_path = safe_path.resolve()  # Resolve absolute path
+    if not str(resolved_safe_path).startswith(str(Path(DATA_DIR).resolve())):
         raise ValueError("Path traversal attempt detected")
     
-    return safe_path
+    return resolved_safe_path
 
 
 @app.route('/run', methods=['POST'])
